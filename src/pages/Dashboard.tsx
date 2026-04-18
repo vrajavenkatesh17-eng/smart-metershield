@@ -6,6 +6,7 @@ import { RiskGauge } from "@/components/RiskGauge";
 import { EnergyTips } from "@/components/EnergyTips";
 import { ForecastChart } from "@/components/ForecastChart";
 import { CarbonCard } from "@/components/CarbonCard";
+import { LoadShiftCard } from "@/components/LoadShiftCard";
 import { supabase } from "@/integrations/supabase/client";
 import { generateReading, SimMode } from "@/lib/simulator";
 import { Bolt, Activity, Gauge as GaugeIcon, Zap, Play, Pause, AlertTriangle, FileDown } from "lucide-react";
