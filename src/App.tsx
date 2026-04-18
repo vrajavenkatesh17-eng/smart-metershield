@@ -9,6 +9,7 @@ import Dashboard from "./pages/Dashboard";
 import Meters from "./pages/Meters";
 import Alerts from "./pages/Alerts";
 import GridMap from "./pages/GridMap";
+import Consumption from "./pages/Consumption";
 import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 
@@ -27,6 +28,7 @@ const App = () => (
           <Route path="/meters" element={<Meters />} />
           <Route path="/alerts" element={<Alerts />} />
           <Route path="/map" element={<GridMap />} />
+          <Route path="/consumption" element={<Consumption />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

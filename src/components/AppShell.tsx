@@ -1,6 +1,6 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Logo } from "./Logo";
-import { LayoutDashboard, AlertTriangle, Map, ShieldCheck, LogOut, Gauge } from "lucide-react";
+import { LayoutDashboard, AlertTriangle, Map, ShieldCheck, LogOut, Gauge, BarChart3 } from "lucide-react";
 import { Button } from "./ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 const nav = [
   { to: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
   { to: "/meters", icon: Gauge, label: "Meters" },
+  { to: "/consumption", icon: BarChart3, label: "Consumption" },
   { to: "/alerts", icon: AlertTriangle, label: "Alerts" },
   { to: "/map", icon: Map, label: "Grid Map" },
 ];
