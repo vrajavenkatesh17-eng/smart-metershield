@@ -14,16 +14,190 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      alerts: {
+        Row: {
+          ai_explanation: string | null
+          created_at: string
+          description: string | null
+          id: string
+          meter_id: string
+          risk_score: number
+          severity: string
+          status: string
+          title: string
+          user_id: string
+        }
+        Insert: {
+          ai_explanation?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          meter_id: string
+          risk_score: number
+          severity: string
+          status?: string
+          title: string
+          user_id: string
+        }
+        Update: {
+          ai_explanation?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          meter_id?: string
+          risk_score?: number
+          severity?: string
+          status?: string
+          title?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "alerts_meter_id_fkey"
+            columns: ["meter_id"]
+            isOneToOne: false
+            referencedRelation: "meters"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      meter_readings: {
+        Row: {
+          current: number
+          id: number
+          meter_id: string
+          power_kwh: number
+          recorded_at: string
+          voltage: number
+        }
+        Insert: {
+          current: number
+          id?: number
+          meter_id: string
+          power_kwh: number
+          recorded_at?: string
+          voltage: number
+        }
+        Update: {
+          current?: number
+          id?: number
+          meter_id?: string
+          power_kwh?: number
+          recorded_at?: string
+          voltage?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "meter_readings_meter_id_fkey"
+            columns: ["meter_id"]
+            isOneToOne: false
+            referencedRelation: "meters"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      meters: {
+        Row: {
+          address: string | null
+          created_at: string
+          id: string
+          label: string | null
+          latitude: number | null
+          longitude: number | null
+          meter_number: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          address?: string | null
+          created_at?: string
+          id?: string
+          label?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          meter_number: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          address?: string | null
+          created_at?: string
+          id?: string
+          label?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          meter_number?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          display_name: string | null
+          email: string | null
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          display_name?: string | null
+          email?: string | null
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          display_name?: string | null
+          email?: string | null
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +324,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+    },
   },
 } as const
