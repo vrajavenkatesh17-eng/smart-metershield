@@ -46,11 +46,26 @@ export function UsageHeatmap({ meterId }: { meterId: string }) {
   }, [readings]);
 
   const cellColor = (v: number) => {
-    if (max === 0 || v === 0) return "hsl(var(--muted) / 0.3)";
-    const intensity = v / max; // 0..1
-    // primary → risk-high gradient
-    const h = 160 - intensity * 160; // green→red rough
-    return `hsl(${h}, 80%, ${30 + intensity * 25}%)`;
+    if (max === 0 || v === 0) return "hsl(220 25% 12%)";
+    const t = Math.pow(v / max, 0.7); // gamma for punchier mids
+    // cyan → green → yellow → orange → magenta-red
+    const stops = [
+      { p: 0.0, h: 190, s: 95, l: 35 },
+      { p: 0.35, h: 145, s: 90, l: 48 },
+      { p: 0.6, h: 55, s: 100, l: 55 },
+      { p: 0.8, h: 25, s: 100, l: 55 },
+      { p: 1.0, h: 340, s: 95, l: 58 },
+    ];
+    let a = stops[0], b = stops[stops.length - 1];
+    for (let i = 0; i < stops.length - 1; i++) {
+      if (t >= stops[i].p && t <= stops[i + 1].p) { a = stops[i]; b = stops[i + 1]; break; }
+    }
+    const k = (t - a.p) / Math.max(0.0001, b.p - a.p);
+    const h = a.h + (b.h - a.h) * k;
+    const s = a.s + (b.s - a.s) * k;
+    const l = a.l + (b.l - a.l) * k;
+    const glow = t > 0.7 ? `0 0 ${4 + t * 8}px hsl(${h} ${s}% ${l}% / 0.7)` : "none";
+    return { background: `hsl(${h} ${s}% ${l}%)`, boxShadow: glow } as const;
   };
 
   return (
@@ -83,36 +98,39 @@ export function UsageHeatmap({ meterId }: { meterId: string }) {
       ) : (
         <div className="overflow-x-auto">
           <div className="inline-block min-w-full">
-            {/* Hour header */}
+            {/* Hour header — every hour */}
             <div className="flex gap-[2px] ml-10 mb-1">
               {Array.from({ length: 24 }, (_, h) => (
-                <div key={h} className="w-[18px] text-[9px] text-muted-foreground text-center font-mono">
-                  {h % 3 === 0 ? h : ""}
+                <div key={h} className="w-[18px] text-[9px] text-muted-foreground text-center font-mono tabular-nums">
+                  {h.toString().padStart(2, "0")}
                 </div>
               ))}
             </div>
             {grid.map((row, d) => (
               <div key={d} className="flex gap-[2px] items-center mb-[2px]">
                 <div className="w-10 text-[10px] text-muted-foreground font-mono">{DAYS[d]}</div>
-                {row.map((v, h) => (
-                  <div
-                    key={h}
-                    className="w-[18px] h-[18px] rounded-sm transition-transform hover:scale-125 hover:z-10 relative"
-                    style={{ backgroundColor: cellColor(v) }}
-                    title={`${DAYS[d]} ${h.toString().padStart(2, "0")}:00 — ${v.toFixed(3)} kWh`}
-                  />
-                ))}
+                {row.map((v, h) => {
+                  const s = cellColor(v);
+                  return (
+                    <div
+                      key={h}
+                      className="w-[18px] h-[18px] rounded-[3px] transition-transform hover:scale-150 hover:z-10 relative cursor-pointer"
+                      style={s as React.CSSProperties}
+                      title={`${DAYS[d]} ${h.toString().padStart(2, "0")}:00 — ${v.toFixed(3)} kWh`}
+                    />
+                  );
+                })}
               </div>
             ))}
             {/* Legend */}
             <div className="flex items-center gap-2 mt-3 ml-10">
-              <span className="text-[10px] text-muted-foreground">Low</span>
+              <span className="text-[10px] text-muted-foreground">0</span>
               <div className="flex gap-[2px]">
-                {[0.05, 0.25, 0.5, 0.75, 1].map((p, i) => (
-                  <div key={i} className="w-4 h-2 rounded-sm" style={{ backgroundColor: cellColor(p * max) }} />
+                {[0.05, 0.2, 0.4, 0.6, 0.8, 1].map((p, i) => (
+                  <div key={i} className="w-5 h-2.5 rounded-sm" style={cellColor(p * max) as React.CSSProperties} />
                 ))}
               </div>
-              <span className="text-[10px] text-muted-foreground">High</span>
+              <span className="text-[10px] text-muted-foreground font-mono">{max.toFixed(2)} kWh</span>
             </div>
           </div>
         </div>
