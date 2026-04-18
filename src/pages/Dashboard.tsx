@@ -199,13 +199,16 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* Forecast + AI tips + Carbon */}
+          {/* Carbon + Load-shift savings */}
+          <div className="grid md:grid-cols-2 gap-4 mt-4">
+            <CarbonCard meterId={meterId} />
+            <LoadShiftCard meterId={meterId} />
+          </div>
+
+          {/* Forecast + AI tips */}
           <div className="grid lg:grid-cols-3 gap-4 mt-4">
             <div className="lg:col-span-2"><ForecastChart meterId={meterId} /></div>
-            <div className="space-y-4">
-              <CarbonCard meterId={meterId} />
-              <EnergyTips meterId={meterId} />
-            </div>
+            <EnergyTips meterId={meterId} />
           </div>
         </>
       )}
