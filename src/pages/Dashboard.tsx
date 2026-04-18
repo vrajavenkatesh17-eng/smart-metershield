@@ -3,6 +3,8 @@ import { AppShell } from "@/components/AppShell";
 import { MetricCard } from "@/components/MetricCard";
 import { LiveChart, ChartPoint } from "@/components/LiveChart";
 import { RiskGauge } from "@/components/RiskGauge";
+import { EnergyTips } from "@/components/EnergyTips";
+import { ForecastChart } from "@/components/ForecastChart";
 import { supabase } from "@/integrations/supabase/client";
 import { generateReading, SimMode } from "@/lib/simulator";
 import { Bolt, Activity, Gauge as GaugeIcon, Zap, Play, Pause, AlertTriangle, FileDown } from "lucide-react";
@@ -193,6 +195,12 @@ export default function Dashboard() {
                 )}
               </AnimatePresence>
             </div>
+          </div>
+
+          {/* Forecast + AI tips */}
+          <div className="grid lg:grid-cols-3 gap-4 mt-4">
+            <div className="lg:col-span-2"><ForecastChart meterId={meterId} /></div>
+            <EnergyTips meterId={meterId} />
           </div>
         </>
       )}
