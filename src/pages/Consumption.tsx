@@ -13,6 +13,7 @@ import { Zap, Calendar, Save, Download, FileText, TrendingUp, TrendingDown } fro
 import { toast } from "sonner";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import { UsageHeatmap } from "@/components/UsageHeatmap";
 
 type Range = "daily" | "weekly" | "monthly";
 interface Meter { id: string; meter_number: string; label: string | null; }
@@ -302,6 +303,11 @@ export default function Consumption() {
           </div>
         )}
       </Card>
+
+      {/* Hour-of-day × day-of-week heatmap */}
+      <div className="mt-6">
+        <UsageHeatmap meterId={meterId} />
+      </div>
     </AppShell>
   );
 }

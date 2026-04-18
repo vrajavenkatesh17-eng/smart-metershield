@@ -5,6 +5,7 @@ import { LiveChart, ChartPoint } from "@/components/LiveChart";
 import { RiskGauge } from "@/components/RiskGauge";
 import { EnergyTips } from "@/components/EnergyTips";
 import { ForecastChart } from "@/components/ForecastChart";
+import { CarbonCard } from "@/components/CarbonCard";
 import { supabase } from "@/integrations/supabase/client";
 import { generateReading, SimMode } from "@/lib/simulator";
 import { Bolt, Activity, Gauge as GaugeIcon, Zap, Play, Pause, AlertTriangle, FileDown } from "lucide-react";
@@ -197,10 +198,13 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* Forecast + AI tips */}
+          {/* Forecast + AI tips + Carbon */}
           <div className="grid lg:grid-cols-3 gap-4 mt-4">
             <div className="lg:col-span-2"><ForecastChart meterId={meterId} /></div>
-            <EnergyTips meterId={meterId} />
+            <div className="space-y-4">
+              <CarbonCard meterId={meterId} />
+              <EnergyTips meterId={meterId} />
+            </div>
           </div>
         </>
       )}
